@@ -444,14 +444,41 @@ $ docker rm attach-test
 
 ```
 workstation/
-├── Dockerfile
-├── site/
+├── Dockerfile           # Docker 이미지 빌드 정의
+├── site/                # 웹 서버 소스코드 (정적 콘텐츠)
 │   └── index.html
-├── screenshots/
-├── README.md
-├── practice/
-├── etc...
-└── .gitignore
+├── screenshots/         # 실행 결과 증거 이미지
+│   ├── port-8080.png
+│   ├── port-8081.png
+│   └── vscode-github.png
+├── README.md            # 기술 문서 (모든 수행 내용의 허브)
+└── .gitignore           # 민감정보/불필요 파일 제외 규칙
+
+이 프로젝트의 디렉토리 구조는 **역할 분리**를 기준으로 구성했다.
+
+1. **빌드 관련 파일은 루트에 배치**
+   - `Dockerfile`은 `docker build .` 명령의 빌드 컨텍스트가 현재 디렉토리(`.`)이므로,
+     프로젝트 루트에 위치해야 `COPY` 경로가 정상 동작한다.
+
+2. **소스코드는 `site/` 폴더로 분리**
+   - 웹 서버가 서빙할 정적 파일(HTML 등)을 별도 폴더에 모았다.
+   - Dockerfile의 `COPY ./site/ /usr/share/nginx/html/`와 바인드 마운트의
+     `-v $(pwd)/site:/usr/share/nginx/html` 모두 이 폴더를 참조한다.
+   - 소스코드와 Docker 설정을 분리하면, 콘텐츠만 수정할 때 Dockerfile을 건드리지 않아도 된다.
+
+3. **증거 자료는 `screenshots/` 폴더로 분리**
+   - 포트 매핑 접속 화면, VSCode 연동 등의 스크린샷을 한곳에 모았다.
+   - README에서 `![설명](./screenshots/파일명.png)` 형태로 참조하여
+     문서와 이미지를 분리하면서도 접근성을 유지했다.
+
+4. **문서는 루트의 `README.md`에 집중**
+   - GitHub 저장소 접속 시 자동으로 렌더링되는 `README.md`를 기술 문서의 허브로 사용했다.
+   - 모든 수행 로그, 검증 결과, 트러블슈팅을 이 파일에서 확인할 수 있도록 구성했다.
+
+5. **민감정보 보호를 위한 `.gitignore` 배치**
+   - `.env`, `*.pem`, `*.key` 등 민감정보가 포함될 수 있는 파일을 Git 추적에서 제외했다.
+   - 실수로 토큰이나 인증 정보가 커밋되는 것을 방지하기 위한 안전장치이다.
+
 ```
 
 ### 8-3. 소스코드
