@@ -449,6 +449,8 @@ workstation/
 │   └── index.html
 ├── screenshots/
 ├── README.md
+├── practice/
+├── etc...
 └── .gitignore
 ```
 
@@ -498,9 +500,44 @@ EXPOSE 80
 ```bash
 $ docker build -t my-web:1.0 .
 # (출력 결과)
+[+] Building 7.5s (7/7) FINISHED                                docker:orbstack
+ => [internal] load build definition from Dockerfile                       0.1s
+ => => transferring dockerfile: 517B                                       0.0s
+ => [internal] load metadata for docker.io/library/nginx:alpine            2.8s
+ => [internal] load .dockerignore                                          0.2s
+ => => transferring context: 2B                                            0.0s
+ => [internal] load build context                                          0.2s
+ => => transferring context: 236B                                          0.0s
+ => [1/2] FROM docker.io/library/nginx:alpine@sha256:e7257f1ef28ba17cf7c2  3.5s
+ => => resolve docker.io/library/nginx:alpine@sha256:e7257f1ef28ba17cf7c2  0.2s
+ => => sha256:7e89aa6cabfc80f566b1b77b981f4bb98413bd2d513 2.50kB / 2.50kB  0.0s
+ => => sha256:e7257f1ef28ba17cf7c248cb8ccf6f0c6e0228ab9 10.33kB / 10.33kB  0.0s
+ => => sha256:d5030d429039a823bef4164df2fad7a0defb8d00c 12.32kB / 12.32kB  0.0s
+ => => sha256:589002ba0eaed121a1dbf42f6648f29e5be55d5c8a6 3.86MB / 3.86MB  0.5s
+ => => sha256:8892f80f46a05d59a4cde3bcbb1dd26ed2441d42148 1.87MB / 1.87MB  0.9s
+ => => sha256:91d1c9c22f2c631288354fadb2decc448ce151d7a197c16 626B / 626B  0.7s
+ => => extracting sha256:589002ba0eaed121a1dbf42f6648f29e5be55d5c8a6ee0f8  0.1s
+ => => sha256:cf1159c696ee2a72b85634360dbada071db61bceaad253d 953B / 953B  1.0s
+ => => sha256:3f4ad4352d4f91018e2b4910b9db24c08e70192c3b75d0d 402B / 402B  1.2s
+ => => extracting sha256:8892f80f46a05d59a4cde3bcbb1dd26ed2441d4214870a4a  0.1s
+ => => sha256:c2bd5ab177271dd59f19a46c214b1327f5c428cd075 1.21kB / 1.21kB  1.4s
+ => => extracting sha256:91d1c9c22f2c631288354fadb2decc448ce151d7a197c167  0.0s
+ => => sha256:4d9d41f3822d171ccc5f2cdfd75ad846ac4c7ed1cd3 1.40kB / 1.40kB  1.5s
+ => => extracting sha256:cf1159c696ee2a72b85634360dbada071db61bceaad253db  0.0s
+ => => extracting sha256:3f4ad4352d4f91018e2b4910b9db24c08e70192c3b75d0d6  0.0s
+ => => sha256:3370263bc02adcf5c4f51831d2bf1d54dbf9a6a80 20.25MB / 20.25MB  1.9s
+ => => extracting sha256:c2bd5ab177271dd59f19a46c214b1327f5c428cd075437ec  0.0s
+ => => extracting sha256:4d9d41f3822d171ccc5f2cdfd75ad846ac4c7ed1cd36fb99  0.0s
+ => => extracting sha256:3370263bc02adcf5c4f51831d2bf1d54dbf9a6a80b0bf32c  0.4s
+ => [2/2] COPY ./site/ /usr/share/nginx/html/                              0.3s
+ => exporting to image                                                     0.2s
+ => => exporting layers                                                    0.1s
+ => => writing image sha256:f611d3f8c7d33c9f2f57490f477b865fbba4e8543906a  0.0s
+ => => naming to docker.io/library/my-web:1.0                              0.0s
 
 $ docker images | grep my-web
 # (출력 결과)
+my-web                   1.0       f611d3f8c7d3   15 seconds ago   62.2MB
 ```
 
 ---
@@ -513,10 +550,13 @@ $ docker images | grep my-web
 # 첫 번째: 호스트 8080 → 컨테이너 80
 $ docker run -d -p 8080:80 --name my-web-8080 my-web:1.0
 # (출력 결과)
+0f1deb9a73575a201b20c1ffa2434aeec6673ca0346f8798962ffe6a412e5eaa
 
 # 두 번째: 호스트 8081 → 컨테이너 80
 $ docker run -d -p 8081:80 --name my-web-8081 my-web:1.0
 # (출력 결과)
+23153aa972f64550deaff0861b8cb81cbe582bdd978b81ede9b7f23d81f92b85
+
 ```
 
 ### 9-2. 접속 확인
@@ -524,12 +564,33 @@ $ docker run -d -p 8081:80 --name my-web-8081 my-web:1.0
 ```bash
 $ curl http://localhost:8080
 # (출력 결과)
+<!DOCTYPE html>
+<html>
+<head><title>Codyssey Workstation</title></head>
+<body>
+	<h1>Hello, Codyssey</h1>
+	<p>Docker workstation setup complete.</p>
+</body>
+</html>
 
 $ curl http://localhost:8081
 # (출력 결과)
+<!DOCTYPE html>
+<html>
+<head><title>Codyssey Workstation</title></head>
+<body>
+	<h1>Hello, Codyssey</h1>
+	<p>Docker workstation setup complete.</p>
+</body>
+</html>
+
 
 $ docker ps
 # (출력 결과 - 두 컨테이너가 모두 실행 중)
+CONTAINER ID   IMAGE                    COMMAND                   CREATED          STATUS          PORTS                                     NAMES
+23153aa972f6   my-web:1.0               "/docker-entrypoint.…"   41 seconds ago   Up 41 seconds   0.0.0.0:8081->80/tcp, [::]:8081->80/tcp   my-web-8081
+0f1deb9a7357   my-web:1.0               "/docker-entrypoint.…"   46 seconds ago   Up 45 seconds   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   my-web-8080
+e43ffadef6ff   docker/getting-started   "/docker-entrypoint.…"   12 hours ago     Up 12 hours     0.0.0.0:80->80/tcp, [::]:80->80/tcp       bold_hoover
 ```
 
 ### 9-3. 브라우저 접속 스크린샷
@@ -585,6 +646,24 @@ EOF
 ```bash
 $ curl http://localhost:8080
 # (출력 결과 - "Bind Mount Works!" 변경된 내용)
+<!DOCTYPE html>
+<html>
+<head><title>Updated!</title></head>
+<body>
+  <h1>Bind Mount Works!</h1>
+  <p>This content was changed on the HOST machine.</p>
+</body>
+</html>
+EOF
+codewhite77770105@c4r10s1 workstation % curl http://localhost:8080
+<!DOCTYPE html>
+<html>
+<head><title>Updated!</title></head>
+<body>
+  <h1>Bind Mount Works!</h1>
+  <p>This content was changed on the HOST machine.</p>
+</body>
+</html>
 ```
 
 ### 10-5. 전후 비교
