@@ -702,6 +702,7 @@ $ docker exec vol-test bash -c "echo 'persistent data!' > /data/hello.txt"
 # 데이터 확인
 $ docker exec vol-test bash -c "cat /data/hello.txt"
 # (출력 결과 - "persistent data!")
+persistent data!
 ```
 
 ### 11-2. 컨테이너 삭제
@@ -761,6 +762,24 @@ $ git config --global init.defaultBranch main
 $ git config --list
 # (출력 결과 - user.name, user.email, init.defaultBranch 확인)
 # ⚠️ credential 관련 항목은 마스킹 처리
+credential.helper=********
+user.name=codewhite7777
+user.email=codewhite7777@gmail.com
+init.defaultbranch=main
+init.defaultbrach=main
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+core.ignorecase=true
+core.precomposeunicode=true
+remote.codewhite7777.url=https://github.com/codewhite7777/codyssey_E-1.git
+remote.codewhite7777.fetch=+refs/heads/*:refs/remotes/codewhite7777/*
+branch.main.remote=codewhite7777
+branch.main.merge=refs/heads/main
+remote.origin.url=git@github.com:codewhite7777/codyssey_E-1.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+
 ```
 
 ### 12-3. 저장소 초기화 및 GitHub 연동
@@ -770,7 +789,7 @@ $ cd ~/codyssey/workstation
 $ git init
 $ git add .
 $ git commit -m "feat: initial workstation setup"
-$ git remote add origin https://github.com/(아이디)/(저장소이름).git
+$ git remote add origin https://github.com/codewhite7777/git@github.com:codewhite7777/codyssey_E-1.git
 $ git push -u origin main
 ```
 
