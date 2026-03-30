@@ -216,6 +216,18 @@ Client:
 
 ## 7. Docker 기본 운영 명령
 
+Dockerfile → (docker build) → 이미지 → (docker run) → 컨테이너
+              빌드 단계           저장 상태         실행 단계
+
+같은 이미지로 컨테이너를 여러 개 만들 수 있다:
+이미지 my-web:1.0
+ ├── 컨테이너 my-web-8080 (포트 8080, 실행 중)
+ ├── 컨테이너 my-web-8081 (포트 8081, 실행 중)
+ └── 컨테이너 my-web-test (종료됨)
+
+각 컨테이너는 독립적이므로, 한 컨테이너에서 파일을 수정해도
+다른 컨테이너나 원본 이미지에는 영향이 없다.
+
 ### 7-1. hello-world 실행
 
 ```bash
@@ -740,11 +752,16 @@ $ docker volume inspect mydata
 ]
 
 # 컨테이너에 볼륨 연결 후 실행
+```bash
 $ docker run -d --name vol-test \
   -v mydata:/data \
   ubuntu sleep infinity
+```
+볼륨 이름(mydata)과 마운트 경로(/data)를 명시하여, 다른 환경에서도 동일하게 재현 가능
+검증 순서(데이터 쓰기 → 컨테이너 삭제 → 새 컨테이너에서 확인)를 단계별로 기록하여, 영속성을 순서대로 따라 검증할 수 있도록 구성
 
 # 데이터 쓰기
+```bash
 $ docker exec vol-test bash -c "echo 'persistent data!' > /data/hello.txt"
 
 # 데이터 확인
