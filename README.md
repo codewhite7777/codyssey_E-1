@@ -691,6 +691,27 @@ $ docker rm -f my-web-bind
 # 볼륨 생성
 $ docker volume create mydata
 
+# 볼륨 생성 확인
+$ docker volume ls
+# (출력 결과 - mydata가 목록에 표시됨)
+DRIVER    VOLUME NAME
+local     mydata
+
+# 볼륨 상세 정보 확인
+$ docker volume inspect mydata
+# (출력 결과 - 마운트포인트, 생성 시간 등 상세 정보)
+[
+    {
+        "CreatedAt": "2026-03-31T06:01:21+09:00",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/mydata/_data",
+        "Name": "mydata",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+
 # 컨테이너에 볼륨 연결 후 실행
 $ docker run -d --name vol-test \
   -v mydata:/data \
@@ -751,8 +772,8 @@ $ docker volume rm mydata
 ### 12-1. Git 사용자 설정
 
 ```bash
-$ git config --global user.name "(이름)"
-$ git config --global user.email "(이메일)"
+$ git config --global user.name "codewhite7777"
+$ git config --global user.email "codewhite7777@gmail.com"
 $ git config --global init.defaultBranch main
 ```
 
